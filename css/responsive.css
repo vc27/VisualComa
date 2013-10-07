@@ -1,0 +1,38 @@
+/* 
+File Name: responsive.css
+Version: 1.2
+Updated: 08.16.13
+Package: ParentTheme_VC
+License: GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+#################################################################################################### */
+
+
+
+@media (max-width: 660px) {
+	
+	
+	
+} /*end @media (max-width: 660px)*/
+
+
+
+
+
+
+@media (max-width: 568px) {
+	
+	
+	
+} /*end @media (max-width: 568px)*/
+
+
+
+
+
+
+@media (max-width: 320px) {
+	
+	#site-title .name,
+	#site-title .desc { display:none; }
+	
+} /*end @media (max-width: 320px)*/
