@@ -2,10 +2,10 @@
 /**
  * File Name loop-single-default.php
  * @package WordPress
- * @subpackage ParentTheme_VC
+ * @subpackage ParentTheme
  * @license GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @version 1.5
- * @updated 07.16.13
+ * @version 1.6
+ * @updated 01.20.14
  **/
 #################################################################################################### */
 
@@ -21,28 +21,26 @@ if ( have_posts() ) {
 		the_post(); 
 		$i++;
 
-			echo "<article id=\"post-" . $wp_query->post->ID . "\" "; post_class("p$i"); echo ">";
+			echo "<article "; post_class(); echo ">";
 				
-				echo "<article "; post_class(); echo ">";
+				vc_title( $post, array(
+					'element' => 'h1',
+					'class' => 'h1',
+				) );
+				
+				echo "<div class=\"meta-data\">";
+					vc_category( array( 'after' => ' | ' ) );
+					vc_comments( $post );
+					vc_date( array( 'before' => ' | ' ) );
+				echo "</div>";
 
-					vc_title( $post, array( 'permalink' => true ) );
-					
-					echo "<div class=\"post-meta-data\">";
-						vc_category( array( 'after' => ' | ' ) );
-						vc_comments( $post );
-						vc_date( array( 'before' => ' | ' ) );
-					echo "</div>";
-
-					vc_content();
-
-					echo "<div class=\"clear\"></div>";
-				echo "</article>";
+				vc_content();
 
 				echo "<div class=\"clear\"></div>";
 			echo "</article>";
 			
 			// Insert Comments if turned on
-			if( ! get_vc_option( 'comments', 'remove_comments' ) AND 'open' == $wp_query->post->comment_status ) {
+			if( ! get__option( 'comments', 'remove_comments' ) AND 'open' == $wp_query->post->comment_status ) {
 				comments_template( '', true );
 			}
 			

@@ -2,10 +2,10 @@
 /**
  * File Name initiate-addons.php
  * @package WordPress
- * @subpackage ParentTheme_VC
+ * @subpackage ParentTheme
  * @license GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @version 1.1
- * @updated 03.15.13
+ * @version 1.2
+ * @updated 10.02.13
  *
  * Description:
  * Include core functionality, activation and theme functions.
@@ -21,7 +21,7 @@ if ( ! defined('THEME_ADDONS_INIT') ) {
 	
 	
 	// Taxonomies & Post Types
-	require_once( "MyWorkPostType.php" );
+	// require_once( "PostTypes/initiate.php" );
 
 	
 	
@@ -37,9 +37,10 @@ if ( ! defined('THEME_ADDONS_INIT') ) {
 	
 	
 	// Added Functionality
-	require_once( "WPSEOEdits.php" );
+	// require_once( "ThemeSupport/initiate.php" );
 	require_once( "Flickr/initiate.php" );
-	require_once( "ColorBox/initiate.php" );
+	require_once( "ImageModal/initiate.php" );
+	require_once( "WPSEOEdits.php" );
 	
 	define( 'THEME_ADDONS_INIT', true );
 	

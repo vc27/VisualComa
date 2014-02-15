@@ -8,11 +8,33 @@ License: GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 
 
-@media (max-width: 660px) {
+@media (max-width: 1024px) {
 	
 	
 	
-} /*end @media (max-width: 660px)*/
+} /*end @media (max-width: 1024px)*/
+
+
+
+
+
+
+@media (max-width: 940px) {
+	
+	
+	
+} /*end @media (max-width: 940px)*/
+
+
+
+
+
+
+@media (max-width: 767px) {
+	
+	body { padding-left:0; padding-right:0; }
+	
+} /*end @media (max-width: 767px)*/
 
 
 
@@ -32,7 +54,6 @@ License: GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 @media (max-width: 320px) {
 	
-	#site-title .name,
-	#site-title .desc { display:none; }
+	
 	
 } /*end @media (max-width: 320px)*/

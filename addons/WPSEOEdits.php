@@ -2,7 +2,7 @@
 /**
  * File Name WPSEOEdits.php
  * @package WordPress
- * @subpackage ParentTheme_VC
+ * @subpackage ParentTheme
  * @license GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @version 1.2
  * @updated 03.16.13

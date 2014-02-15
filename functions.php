@@ -2,10 +2,10 @@
 /**
  * File Name functions.php
  * @package WordPress
- * @subpackage ParentTheme_VC
+ * @subpackage ParentTheme
  * @license GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * @version 2.2
- * @updated 02.11.13
+ * @version 2.3
+ * @updated 10.17.13
  **/
 #################################################################################################### */
 
@@ -30,42 +30,73 @@ require_once( "addons/initiate-addons.php" );
 
 
 
-/**
- * Initiate ParentTheme_VC
- *
- * @version 1.2
- * @updated 11.18.12
- **/
-add_action( 'after_setup_theme', 'init_ChildTheme_VC' );
-function init_ChildTheme_VC() {
-	
-	$settings = new ChildTheme_VC();
-	
-	// Set Paths
-	$settings->template_path = get_stylesheet_directory();
-	$settings->template_directory = get_stylesheet_directory_uri();
-	
-	$settings->ajax_action = 'vc-ajax';
-	
-	// $settings->after_setup_theme();	
-	add_action( 'init', array( &$settings, 'init' ) );
-	// add_action( 'admin_init', array( &$settings, 'admin_init' ) );
-	// add_action( 'widgets_init', array( &$settings, 'widgets_init' ) );
-	
-} // end function init_ChildTheme_VC
-
-
-
-
-
 
 /**
  * ChildTheme_VC Class
  *
- * @version 0.0.4
- * @update	05.21.12
+ * @version 1.5
+ * @updated 10.17.13
  **/
+$ChildTheme_VC = new ChildTheme_VC();
+$ChildTheme_VC->set( 'ThemeCompatibility', $ThemeCompatibility );
+$ChildTheme_VC->init_child_theme();
 class ChildTheme_VC {
+	
+	
+	
+	
+	
+	
+	/**
+	 * __construct
+	 *
+	 * @version 1.0
+	 * @updated 10.17.13
+	 **/
+	function __construct() {
+		
+		$this->set( 'stylesheet_directory', get_stylesheet_directory() );
+		$this->set( 'stylesheet_directory_uri', get_stylesheet_directory_uri() );
+		$this->set( 'ajax_action', 'vc-ajax' );
+		
+	} // end function __construct
+	
+	
+	
+	
+	
+	
+	/**
+	 * init_child_theme
+	 *
+	 * @version 1.0
+	 * @updated 10.17.13
+	 **/
+	function init_child_theme() {
+		
+		// add_action( 'after_setup_theme', array( &$this, 'after_setup_theme' ) );
+		add_action( 'init', array( &$this, 'init' ) );
+		
+	} // end function init_child_theme
+	
+	
+	
+	
+	
+	
+	/**
+     * set
+     *
+     * @version 1.0
+     * @updated 00.00.13
+     **/
+    function set( $key, $val = false ) {
+
+        if ( isset( $key ) AND ! empty( $key ) ) {
+            $this->$key = $val;
+        }
+
+    } // end function set
 	
 	
 	
@@ -81,7 +112,8 @@ class ChildTheme_VC {
 	function after_setup_theme() {
 		
 		// Translations can be added to the /languages/ directory.
-		load_theme_textdomain( 'childtheme', get_stylesheet_directory() . '/languages' );
+		load_theme_textdomain( 'childtheme', "$this->stylesheet_directory/languages" );
+		load_theme_textdomain( 'parenttheme', $this->parent_theme->template_directory . "/languages" );
 		
 	} // end function after_setup_theme
 	
@@ -99,22 +131,22 @@ class ChildTheme_VC {
 	function init() {
 		
 		// Add Parent Theme class
-		$this->parent_theme = new ParentTheme_VC();
+		$this->set( 'parent_theme', new ParentTheme_VC() );
 		
 		
 		// register_sidebars
-		/*$register_sidebars = $this->parent_theme->register_sidebars( array(
+		$register_sidebars = $this->parent_theme->register_sidebars( array(
 			'Primary Sidebar' => array(
 				'desc' => 'This is the primary widgetized area.',
 				),
-			) );*/
+			) );
 		
 		
 		// register_nav_menus
-		/*register_nav_menus( array(
+		register_nav_menus( array(
 			'primary-navigation' => 'Primary Navigation',
 			'footer-navigation' => 'Footer Navigation'
-			) );*/
+			) );
 		
 		
 		// register styles and scripts
@@ -125,24 +157,20 @@ class ChildTheme_VC {
 		 * Front End - Enqueue, Print & other menial labor
 		 **/
 		
-		// Adjax
-		add_action( "wp_ajax_$this->ajax_action", array( $this, 'do_ajax' ) );
+		add_action( 'wp_head', array( &$this, 'wp_head' ) );
 		
 		// Layout Options
 		add_action( 'template_redirect', array( &$this, 'layout_options' ) );
 		
-		// Deregister
-		add_action( 'wp', array( &$this, 'wp_deregister_script' ) );
-		
 		// CSS // wp_print_styles
-		add_action( 'wp_print_styles', array( &$this, 'wp_print_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( &$this, 'wp_print_styles' ) );
 		
 		// Javascripts // wp_enqueue_scripts // wp_print_scripts
 		add_action( 'wp_enqueue_scripts', array( &$this, 'wp_enqueue_scripts' ) );
-		add_filter( 'parenttheme-localize_script', array( &$this, 'localize_script' ) );
+		// add_filter( 'parenttheme-localize_script', array( &$this, 'localize_script' ) );
 		
 		// Breadcrumb Navigation
-		add_action( 'inner_wrap_top', array( &$this, 'breadcrumb_navigation' ) );
+		// add_action( 'inner_wrap_top', array( &$this, 'breadcrumb_navigation' ) );
 		
 		// Login Scripts
 		add_action( 'login_enqueue_scripts', array( &$this, 'login_enqueue_scripts' ) );
@@ -214,17 +242,10 @@ class ChildTheme_VC {
 		/**
 		 * CSS
 		 **/
-		
+		wp_register_style( 'icomoon', "$this->stylesheet_directory_uri/css/icomoon/style.css" );
 		wp_register_style( 'google-fonts', "http://fonts.googleapis.com/css?family=Cutive+Mono|Open+Sans:400italic,700italic,400,700" );
-		
-		// Default CSS
-		wp_register_style( 'childtheme-default', "$this->template_directory/css/default.css" );
-		
-		// Icons
-		wp_register_style( 'iconmoon', "$this->template_directory/css/iconmoon/style.css" );
-		
-		// Mobile CSS - iphone 5 horizontal width
-		wp_register_style( 'childtheme-responsive', "$this->template_directory/css/responsive.css" );
+		wp_register_style( 'childtheme-default', "$this->stylesheet_directory_uri/css/default.css" );
+		wp_register_style( 'childtheme-responsive', "$this->stylesheet_directory_uri/css/responsive.css" );
 		
 		
 		
@@ -233,35 +254,9 @@ class ChildTheme_VC {
 		 **/
 		
 		// Custom JS
-		wp_register_script( 'childTheme', "$this->template_directory/js/childTheme.js", array( 'helper' ) );
+		wp_register_script( 'childTheme', "$this->stylesheet_directory_uri/js/childTheme.js", array( 'helper' ) );
 		
 	} // end function register_style_and_scripts
-	
-	
-	
-	
-	
-	
-	/**
-	 * De-Register Styles and Scripts
-	 *
-	 * @version 1.5
-	 * @updated 1.18.12
-	 * 
-	 * Deregister parenttheme css and custom js. This will
-	 * allow the child theme to operate 100% separate from
-	 * any confines of the parenttheme and will require less
-	 * overwritten code.
-	 **/
-	function wp_deregister_script() {		
-		
-		// CSS
-		wp_deregister_style( 'parenttheme-style' );
-		
-		// JS
-		wp_deregister_script( 'parenttheme-custom' );
-		
-	} // end function wp_deregister_script
 	
 	
 	
@@ -273,6 +268,23 @@ class ChildTheme_VC {
 	 * Front End - Enqueue, Print & other menial labor
 	 **/
 	####################################################################################################
+	
+	
+	
+	
+	
+	
+	/**
+	 * wp_head
+	 * 
+	 * @version 1.0
+	 * @updated	00.00.00
+	 **/
+	function wp_head() {
+		
+		echo "\n<link rel=\"icon\" type=\"image/png\" href=\"/favicon.png\" />\n";
+
+	} // end function wp_head 
 	
 	
 	
@@ -313,26 +325,16 @@ class ChildTheme_VC {
 	/**
 	 * Add CSS
 	 *
-	 * @version 1.4
-	 * @updated 11.18.12
+	 * @version 1.5
+	 * @updated 10.20.12
 	 **/
 	function wp_print_styles() {
 		
-		/**
-		 * Notes on parenttheme-reset
-		 * 
-		 * Add reset here to make sure it is called before child-style
-		 * do not add it as a dependant to childtheme-style or else 
-		 * deregistering will be more of a pain in the ass
-		 **/
-		wp_enqueue_style( 'parenttheme-reset' );
-		
-		// wp_enqueue_style( 'bootstrap-responsive' );		
-		wp_enqueue_style( 'iconmoon' );
-		wp_enqueue_style( 'google-fonts' );
-		
-		wp_enqueue_style( 'childtheme-default' );
-		
+		wp_enqueue_style( 'parenttheme-reset' );		
+		wp_enqueue_style( 'bootstrap-responsive' );
+		wp_enqueue_style( 'icomoon' );
+		wp_enqueue_style( 'google-fonts' );		
+		wp_enqueue_style( 'childtheme-default' );		
 		wp_enqueue_style( 'childtheme-responsive' );
 
 	} // end function wp_print_styles
@@ -355,11 +357,10 @@ class ChildTheme_VC {
 		 * 
 		 * Helper script pulls in all necessary scripts from parenttheme.
 		 * It is added here to ensure it is called before child-custom.
-		 * Do not add it as a dependant to childtheme-style or else 
+		 * Do not add it as a dependent to childtheme-style or else 
 		 * deregistering will be more of a pain in the ass.
 		 **/
-		wp_enqueue_script( 'helper' );
-		
+		wp_enqueue_script( 'helper' );		
 		wp_enqueue_script( 'childTheme' );
 		
 	} // function wp_enqueue_scripts 
@@ -421,11 +422,10 @@ class ChildTheme_VC {
 			return;
 		} else {
 			
-			require_once( get_template_directory() . "/includes/classes/Breadcrumb_Navigation_VC.php" );
+			require_once( $this->parent_theme->template_directory . "/includes/classes/Breadcrumb_Navigation_VC.php" );
 			
 			// Breadcrumb Navigation
-			$this->breadcrumb = new Breadcrumb_Navigation_VC();
-
+			$this->set( 'breadcrumb', new Breadcrumb_Navigation_VC() );
 			$this->breadcrumb->breadcrumb_navigation( array(
 				'before' => '<div id="navigation-breadcrumb-inner-wrap">',
 				'after' => '</div>',

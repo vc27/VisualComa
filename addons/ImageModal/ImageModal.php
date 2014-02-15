@@ -1,11 +1,11 @@
 <?php
 /**
- * File Name ColorBoxVCWP.php
+ * File Name ImageModal.php
  * @package WordPress
- * @subpackage ParentTheme_VC
+ * @subpackage ProjectName
  * @license GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @version 1.0
- * @updated 00.00.13
+ * @updated 00.00.00
  **/
 ####################################################################################################
 
@@ -14,13 +14,35 @@
 
 
 /**
- * ColorBoxVCWP
+ * ImageModal
  *
  * @version 1.0
- * @updated 00.00.13
+ * @updated 00.00.00
  **/
-$ColorBoxVCWP = new ColorBoxVCWP();
-class ColorBoxVCWP {
+$ImageModal = new ImageModal();
+class ImageModal {
+	
+	
+	
+	/**
+	 * Option name
+	 * 
+	 * @access public
+	 * @var string
+	 * Description:
+	 * Used for various purposes when an import may be adding content to an option.
+	 **/
+	var $option_name = false;
+	
+	
+	
+	/**
+	 * errors
+	 * 
+	 * @access public
+	 * @var array
+	 **/
+	var $errors = array();
 	
 	
 	
@@ -31,11 +53,11 @@ class ColorBoxVCWP {
 	 * __construct
 	 *
 	 * @version 1.0
-	 * @updated 00.00.13
+	 * @updated 00.00.00
 	 **/
 	function __construct() {
-
-		$this->set_paths();
+		
+		$this->set( 'stylesheet_directory_uri', get_stylesheet_directory_uri() . "/addons/ImageModal" );
 
 		// hook method init
 		add_action( 'init', array( &$this, 'init' ) );
@@ -48,29 +70,10 @@ class ColorBoxVCWP {
 	
 	
 	/**
-	 * set_paths
-	 *
-	 * @version 1.0
-	 * @updated 00.00.13
-	 **/
-	function set_paths() {
-
-		$this->set( 'dir_path', "/addons/ColorBox" );
-		$this->set( 'template_path', get_stylesheet_directory() . $this->dir_path );
-		$this->set( 'template_directory', get_stylesheet_directory_uri() . $this->dir_path );
-
-	} // end function set_paths
-	
-	
-	
-	
-	
-	
-	/**
 	 * init
 	 *
 	 * @version 1.0
-	 * @updated 00.00.13
+	 * @updated 00.00.00
 	 * @codex http://codex.wordpress.org/Plugin_API/Action_Reference/init
 	 * 
 	 * Description:
@@ -81,11 +84,8 @@ class ColorBoxVCWP {
 		// register styles and scripts
 		$this->register_style_and_scripts();
 		
-		// CSS // wp_print_styles
-		add_action( 'wp_print_styles', array( &$this, 'wp_print_styles' ) );
-		
-		// Javascripts // wp_enqueue_scripts // wp_print_scripts
 		add_action( 'wp_enqueue_scripts', array( &$this, 'wp_enqueue_scripts' ) );
+		add_action( 'wp_footer', array( &$this, 'wp_footer' ) );
 		
 	} // end function init
 	
@@ -98,7 +98,7 @@ class ColorBoxVCWP {
 	 * set
 	 *
 	 * @version 1.0
-	 * @updated 00.00.13
+	 * @updated 00.00.00
 	 **/
 	function set( $key, $val = false ) {
 		
@@ -107,6 +107,44 @@ class ColorBoxVCWP {
 		}
 		
 	} // end function set
+	
+	
+	
+	
+	
+	
+	/**
+	 * error
+	 *
+	 * @version 1.0
+	 * @updated 00.00.00
+	 **/
+	function error( $error_key ) {
+		
+		$this->errors[] = $error_key;
+		
+	} // end function error
+	
+	
+	
+	
+	
+	
+	/**
+	 * get
+	 *
+	 * @version 1.0
+	 * @updated 00.00.00
+	 **/
+	function get( $key ) {
+		
+		if ( isset( $key ) AND ! empty( $key ) AND isset( $this->$key ) AND ! empty( $this->$key ) ) {
+			return $this->$key;
+		} else {
+			return false;
+		}
+		
+	} // end function get
 	
 	
 	
@@ -128,40 +166,14 @@ class ColorBoxVCWP {
 	 * Register Styles and Scripts
 	 *
 	 * @version 1.0
-	 * @updated 00.00.13
+	 * @updated 00.00.00
 	 **/
 	function register_style_and_scripts() {
 		
-		/**
-		 * CSS
-		 **/
-		wp_register_style( 'colorbox', "$this->template_directory/css/colorbox.css" );
-		
-		
-		
-		/**
-		 * JS
-		 **/
-		wp_register_script( 'colorbox', "$this->template_directory/js/jquery.colorbox-min.js", array( 'jquery' ) );
+		// Custom JS
+		wp_register_script( 'imageModal', "$this->stylesheet_directory_uri/js/imageModal.js", array( 'jquery' ) );
 		
 	} // end function register_style_and_scripts
-	
-	
-	
-	
-	
-	
-	/**
-	 * Add CSS
-	 *
-	 * @version 1.0
-	 * @updated 00.00.13
-	 **/
-	function wp_print_styles() {
-		
-		wp_enqueue_style( 'colorbox' );
-
-	} // end function wp_print_styles
 	
 	
 	
@@ -172,13 +184,36 @@ class ColorBoxVCWP {
 	 * Enqueue Scripts
 	 *
 	 * @version 1.0
-	 * @updated 00.00.13
+	 * @updated 00.00.00
 	 **/
 	function wp_enqueue_scripts() {
 		
-		wp_enqueue_script( 'colorbox' );
+		wp_enqueue_script( 'imageModal' );
 		
-	} // function wp_enqueue_scripts
+	} // function wp_enqueue_scripts 
+	
+	
+	
+	
+	
+	
+	/**
+	 * wp_footer
+	 *
+	 * @version 1.0
+	 * @updated 00.00.00
+	 **/
+	function wp_footer() {
+		
+		echo "<div id=\"image-modal\" class=\"fade out\">";
+			echo "<div class=\"inside-wrapper\">";
+				echo "<div class=\"close icon-cancel-circle\"></div>";
+				echo "<div class=\"image-title\">image title goes here</div>";
+				echo "<div class=\"image-wrapper\"></div>";
+			echo "</div>";
+		echo "</div>";
+		
+	} // function wp_footer
 	
 	
 	
@@ -200,7 +235,7 @@ class ColorBoxVCWP {
 	 * have_something
 	 *
 	 * @version 1.0
-	 * @updated 00.00.13
+	 * @updated 00.00.00
 	 **/
 	function have_something() {
 		
@@ -216,4 +251,4 @@ class ColorBoxVCWP {
 	
 	
 	
-} // end class ColorBoxVCWP
+} // end class ImageModal
