@@ -56,6 +56,19 @@ class ProcessFlickrResults {
 	
 	
 	/**
+	 * image_permalink
+	 * 
+	 * @access public
+	 * @var string
+	 *
+	 * Info:
+	 * farm, server, secret, id, size
+	 **/
+	var $image_permalink = 'https://www.flickr.com/photos/%1$s/%2$s/';
+	
+	
+	
+	/**
 	 * sizes
 	 * 
 	 * @access public
@@ -255,6 +268,11 @@ class ProcessFlickrResults {
 						$this->photo['id'],
 						$this->photo['secret'], 
 						$this->sizes[$this->size]['id'] 
+					) );
+					
+					$this->set_photo_attr( 'permalink', sprintf( $this->image_permalink, 
+						$this->username,
+						$this->photo['id']
 					) );
 					
 				}

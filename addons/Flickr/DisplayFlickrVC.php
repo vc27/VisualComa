@@ -58,7 +58,7 @@ class DisplayFlickrVC {
 	 * @access public
 	 * @var bool
 	 **/
-	var $delete_transient = 0;
+	var $delete_transient = 1;
 	
 	
 	
@@ -68,7 +68,7 @@ class DisplayFlickrVC {
 	 * @access public
 	 * @var bool
 	 **/
-	var $transient_deleted = 0;
+	var $transient_deleted = 1;
 	
 	
 	
@@ -167,6 +167,8 @@ class DisplayFlickrVC {
 		}
 		
 		$this->set( 'flickr', new GetFlickrVC() );
+		// $this->flickr->set( 'size', 'medium-800' );
+		$this->flickr->set( 'username', 'visualcoma' );
 
 	} // end function __construct
 	
@@ -271,6 +273,7 @@ class DisplayFlickrVC {
 			'alt_text' => $this->image['title'],
 			'rel' => '',
 			'data_attr' => '',
+			'target' => '_blank',
 			'before' => '',
 			'after' => '',
 			'echo' => 0,
@@ -279,8 +282,8 @@ class DisplayFlickrVC {
 		$r = wp_parse_args( $defaults, $this->image_args );
 		extract( $r );
 		
-		if ( isset( $this->image_args['permalink'] ) AND ! empty( $this->image_args['permalink'] ) ) {
-			$a_ = "<a href=\"$src\" title=\"" . esc_attr( strip_tags( $title ) ) . "\" rel=\"$rel\" $data_attr>";
+		if ( isset( $this->image['permalink'] ) AND ! empty( $this->image['permalink'] ) ) {
+			$a_ = "<a target=\"$target\" href=\"" . $this->image['permalink'] . "\" title=\"" . esc_attr( strip_tags( $title ) ) . "\" rel=\"$rel\" $data_attr>";
 			$_a = "</a>";
 		} else {
 			$a_ = "";
@@ -361,7 +364,7 @@ class DisplayFlickrVC {
 		
 		$this->set_transient_name();
 		$this->delete_transient();
-		$this->get_transient_results();
+		// $this->get_transient_results();
 		
 		if ( $this->have_html() ) {
 			

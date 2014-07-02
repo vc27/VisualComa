@@ -113,6 +113,7 @@ Usage - class="img img-name-here" -- allows controlled image sizes for retina di
 	box-shadow:0 1px 2px rgba(0,0,0,0.5); -moz-box-shadow:0 1px 2px rgba(0,0,0,0.5); -webkit-box-shadow:0 1px 2px rgba(0,0,0,0.5); -o-box-shadow:0 1px 2px rgba(0,0,0,0.5);
 }
 #footer { z-index:0; }
+#footer img { max-width:100%; height:auto; }
 
 
 
@@ -202,7 +203,7 @@ a.read_more:hover {}
 .entry .h4, .entry h4, 
 .entry .h5, .entry h5, 
 .entry .h6, .entry h6 
-{}
+{ padding-bottom:15px; }
 
 
 
@@ -265,9 +266,9 @@ a.read_more:hover {}
 #################################################################################################### */
 
 .flickr-gallery { text-align:center; line-height:0; }
-.flickr-gallery .image-wrap { position:relative; display:inline-block; vertical-align:top; margin:5px 5px 0 0; }
+.flickr-gallery .image-wrap { position:relative; display:block; vertical-align:top; margin:5px 0 0 0; }
 .flickr-gallery .image-wrap a { display:inline-block; }
-.flickr-gallery .image-wrap img { max-width:200px !important; height:auto;  }
+.flickr-gallery .image-wrap img { max-width:100%; height:auto;  }
 
 
 #setThumbs { clear:both; }

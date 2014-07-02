@@ -30,7 +30,7 @@ var childTheme = {
 	 **/
 	init : function() {
 		
-		childTheme.Flickr();
+		// childTheme.Flickr();
 		childTheme.navSwap();
 		
 	}, // end init : function

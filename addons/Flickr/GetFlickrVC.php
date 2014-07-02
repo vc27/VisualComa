@@ -325,6 +325,9 @@ class GetFlickrVC {
 			if ( isset( $this->size ) AND ! empty( $this->size ) ) {
 				$processor->set( 'size', $this->size );
 			}
+			if ( isset( $this->username ) AND ! empty( $this->username ) ) {
+				$processor->set( 'username', $this->username );
+			}
 			$this->set( 'results', $processor->process_images( $this->results ) );
 			
 		} else {
